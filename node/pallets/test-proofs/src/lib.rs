@@ -183,25 +183,28 @@ pub mod pallet {
 			// Index of the index of the stored test proof which we are verifying
 			test_proof_details_index: u32
 		) -> DispatchResult {
-			let who = ensure_signed(origin)?;
+			ensure_signed(origin)?;
 
-			let test_proof_requests = TestProofRequests::<T>::get();
-			let test_proof_request = test_proof_requests.get(test_proof_details_index as usize).ok_or(Error::<T>::TestProofNotFound)?;
+			let mut test_proof_requests = TestProofRequests::<T>::get();
+			let test_proof_request = test_proof_requests
+				.get(test_proof_details_index as usize)
+				.ok_or(Error::<T>::TestProofNotFound)?
+				.clone();
+
+			test_proof_requests.remove(test_proof_details_index as usize);
 
 			let segments: Vec<SegmentReceipt> = receipt_data
 				.clone()
 				.into_iter()
 				.map(|(seal, index)| SegmentReceipt { seal, index })
 				.collect();
-
 			let receipt = SessionReceipt { segments, journal };
 			receipt.verify(image_id).map_err(|_| Error::<T>::ProofNotVerified)?;
-
+			
 
 			let commit = test_proof_request.clone().commit.expect("Commit should exist");
 			TestProofs::<T>::insert(commit, receipt_data);
-			Self::deposit_event(Event::<T>::TestProofVerified(test_proof_request.clone()));
-
+			Self::deposit_event(Event::<T>::TestProofVerified(test_proof_request));
 			Ok(())
 		}
 	}
