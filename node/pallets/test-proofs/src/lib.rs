@@ -51,6 +51,8 @@ pub mod pallet {
 	}
 
 	#[derive(Clone, Debug, Decode, Encode, PartialEq, Eq, TypeInfo)]
+	/// Sufficient details for some party to retrieve source code information. 
+	/// NOTE: only public git repositories are supported at this time
 	pub struct TestProofDetails {
 		full_name: Vec<u8>,
 		branch: Option<BoundedVec<u8, ConstU32<1000>>>,
