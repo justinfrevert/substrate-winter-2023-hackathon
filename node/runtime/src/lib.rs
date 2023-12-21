@@ -45,8 +45,6 @@ use pallet_transaction_payment::{ConstFeeMultiplier, CurrencyAdapter, Multiplier
 pub use sp_runtime::BuildStorage;
 pub use sp_runtime::{Perbill, Permill};
 
-pub use pallet_prover_mgmt;
-
 /// An index to a block.
 pub type BlockNumber = u32;
 
@@ -281,19 +279,10 @@ parameter_types! {
 }
 
 /// Configure the pallet-template in pallets/template.
-impl pallet_prover_mgmt::Config for Runtime {
-	type Currency = Balances;
-	type RuntimeEvent = RuntimeEvent;
-	type WeightInfo = pallet_prover_mgmt::weights::SubstrateWeight<Runtime>;
-	type MaxArgsLength = MaxArgsLength;
-	type MaxProgramLength = MaxProgramLength;
-	type MaxProofLength = MaxProofLength;
-}
-
-/// Configure the pallet-template in pallets/template.
 impl pallet_test_proofs::Config for Runtime {
 	type Currency = Balances;
 	type RuntimeEvent = RuntimeEvent;
+	type WeightInfo = pallet_test_proofs::weights::SubstrateWeight<Runtime>;
 	type MaxArgsLength = MaxArgsLength;
 	type MaxProgramLength = MaxProgramLength;
 	type MaxProofLength = MaxProofLength;
@@ -314,7 +303,6 @@ construct_runtime!(
 		Balances: pallet_balances,
 		TransactionPayment: pallet_transaction_payment,
 		Sudo: pallet_sudo,
-		ProverMgmt: pallet_prover_mgmt,
 		TestProofs: pallet_test_proofs
 	}
 );
@@ -362,7 +350,6 @@ mod benches {
 		[frame_system, SystemBench::<Runtime>]
 		[pallet_balances, Balances]
 		[pallet_timestamp, Timestamp]
-		[pallet_prover_mgmt, TemplateModule]
 	);
 }
 
