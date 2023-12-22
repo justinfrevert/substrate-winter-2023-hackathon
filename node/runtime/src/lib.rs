@@ -280,12 +280,8 @@ parameter_types! {
 
 /// Configure the pallet-template in pallets/template.
 impl pallet_test_proofs::Config for Runtime {
-	type Currency = Balances;
 	type RuntimeEvent = RuntimeEvent;
 	type WeightInfo = pallet_test_proofs::weights::SubstrateWeight<Runtime>;
-	type MaxArgsLength = MaxArgsLength;
-	type MaxProgramLength = MaxProgramLength;
-	type MaxProofLength = MaxProofLength;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.
